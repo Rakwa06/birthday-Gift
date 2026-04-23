@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Happy Birthday! 🎂</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{font-size:16px}
+body{width:100%;background:#0f0520;font-family:Georgia,serif;color:#fff;overflow-x:hidden;min-height:100vh}
+.screen{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 16px;position:relative;overflow:hidden}
+.hidden{display:none!important}
+
+#heart-layer{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;overflow:hidden}
+.fheart{position:absolute;top:-50px;cursor:pointer;pointer-events:all;user-select:none;animation:hfall linear forwards}
+@keyframes hfall{0%{transform:translateY(0) rotate(0deg);opacity:1}100%{transform:translateY(110vh) rotate(400deg);opacity:0}}
+@keyframes explode{0%{transform:scale(1);opacity:1}50%{transform:scale(3.5);opacity:.8}100%{transform:scale(0);opacity:0}}
+.exploding{animation:explode .5s ease forwards!important}
+
+/* SCREEN 1 — PASSWORD */
+#s-lock{background:linear-gradient(160deg,#1a0533,#2d0a4e,#0f0520)}
+.lock-box{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:20px;padding:28px 20px;width:100%;max-width:340px;text-align:center;position:relative;z-index:2}
+.lock-icon{font-size:42px;margin-bottom:10px;display:block}
+.lock-title{font-size:clamp(1.2rem,5vw,1.5rem);background:linear-gradient(90deg,#f9a8d4,#fde68a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:5px}
+.lock-sub{font-size:12px;color:#c4b5fd;margin-bottom:18px;line-height:1.5}
+#pw-input{width:100%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:12px;color:#fff;font-size:20px;padding:13px 16px;text-align:center;letter-spacing:6px;outline:none;margin-bottom:12px;font-family:Georgia,serif;-webkit-appearance:none}
+#pw-input:focus{border-color:#f9a8d4}
+#pw-btn{width:100%;padding:14px;border-radius:12px;border:none;background:linear-gradient(135deg,#ec4899,#a855f7);color:#fff;font-size:15px;font-weight:700;cursor:pointer;touch-action:manipulation}
+.pw-error{font-size:12px;color:#fb7185;margin-top:9px;min-height:16px}
+.hint-box{background:rgba(250,204,21,.1);border:1px solid rgba(250,204,21,.3);border-radius:10px;padding:9px 12px;font-size:12px;color:#fde68a;margin-top:10px;display:none;line-height:1.5}
+.funny-box{background:rgba(236,72,153,.12);border:1px solid rgba(236,72,153,.3);border-radius:10px;padding:9px 12px;font-size:12px;color:#f9a8d4;margin-top:8px;display:none;line-height:1.6}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-10px)}40%{transform:translateX(10px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
+.shake{animation:shake .45s ease}
+
+/* SCREEN 2 — GIFT */
+#s-gift{background:linear-gradient(160deg,#0a1a40,#1a0533,#0f0520)}
+.gift-area{position:relative;z-index:2;text-align:center;width:100%}
+.gift-title{font-size:clamp(1.2rem,5vw,1.6rem);background:linear-gradient(90deg,#fde68a,#f9a8d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px}
+.gift-sub{font-size:13px;color:#c4b5fd;margin-bottom:32px}
+.gift-wrap{position:relative;display:inline-block;cursor:pointer;touch-action:manipulation}
+.gift-box-svg{transition:transform .2s;display:block;margin:0 auto}
+.gift-wrap:active .gift-box-svg{transform:scale(.92)}
+.click-hint{font-size:13px;color:#e9d5ff;margin-top:14px;animation:pulse 2s ease infinite}
+@keyframes pulse{0%,100%{opacity:.6}50%{opacity:1}}
+@keyframes giftOpen{0%{transform:scale(1) rotate(0);opacity:1}30%{transform:scale(1.3) rotate(10deg)}60%{transform:scale(.8) rotate(-5deg)}100%{transform:scale(0);opacity:0}}
+.gift-opening{animation:giftOpen .7s ease forwards}
+@keyframes burst{0%{transform:scale(0);opacity:1}100%{transform:scale(4);opacity:0}}
+.burst-ring{position:absolute;top:50%;left:50%;width:70px;height:70px;margin:-35px 0 0 -35px;border-radius:50%;border:3px solid #f9a8d4;animation:burst .8s ease forwards;pointer-events:none}
+
+/* SCREEN 3 — MESSAGE */
+#s-msg{background:linear-gradient(160deg,#1a0533,#0a1040,#0f0520)}
+.msg-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:24px 18px 26px;max-width:400px;width:100%;text-align:center;position:relative;z-index:2}
+.msg-to{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#c4b5fd;margin-bottom:5px}
+.msg-name{font-size:clamp(1.4rem,6vw,2rem);font-weight:700;color:#fde68a;margin-bottom:16px;word-break:break-word}
+#typed-msg{font-size:clamp(.88rem,3.5vw,1rem);color:#e9d5ff;line-height:1.85;min-height:60px;text-align:left;word-break:break-word;position:relative}
+#typed-msg::after{content:'❤';color:#ec4899;animation:blink .8s step-end infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.heart-row{font-size:clamp(18px,5vw,24px);margin:18px 0;animation:hbounce 1.5s ease infinite;letter-spacing:4px}
+@keyframes hbounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.music-bar{background:rgba(255,255,255,.07);border-radius:12px;padding:10px 13px;display:flex;align-items:center;gap:10px;margin-top:14px}
+.play-btn{width:38px;height:38px;min-width:38px;border-radius:50%;background:linear-gradient(135deg,#ec4899,#a855f7);border:none;color:#fff;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;touch-action:manipulation}
+.music-info{flex:1;text-align:left;overflow:hidden}
+.music-title{font-size:13px;color:#fff;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.music-note{font-size:11px;color:#c4b5fd}
+.wave-bars{display:flex;gap:3px;align-items:flex-end;height:18px;flex-shrink:0}
+.wb{width:3px;background:#a855f7;border-radius:2px;animation:wv .8s ease infinite}
+.wb:nth-child(1){height:6px;animation-delay:0s}.wb:nth-child(2){height:12px;animation-delay:.15s}.wb:nth-child(3){height:17px;animation-delay:.3s}.wb:nth-child(4){height:10px;animation-delay:.45s}.wb:nth-child(5){height:5px;animation-delay:.6s}
+@keyframes wv{0%,100%{transform:scaleY(1)}50%{transform:scaleY(.3)}}
+.wave-bars.paused .wb{animation-play-state:paused;opacity:.3}
+.sparkle-fixed{position:fixed;pointer-events:none;z-index:0;animation:spkl 2s ease-in-out infinite;font-size:13px}
+@keyframes spkl{0%,100%{opacity:0;transform:scale(.5)}50%{opacity:1;transform:scale(1.2)}}
+
+/* SCREEN 4 — PHOTOS */
+#s-photos{background:linear-gradient(160deg,#1a0533,#0a1040,#0f0520)}
+.photos-area{position:relative;z-index:2;text-align:center;width:100%;max-width:500px}
+.photos-title{font-size:clamp(1.2rem,5vw,1.6rem);background:linear-gradient(90deg,#fde68a,#f9a8d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px}
+.photos-sub{font-size:13px;color:#c4b5fd;margin-bottom:20px}
+.upload-box{background:rgba(255,255,255,.08);border:2px dashed rgba(255,255,255,.3);border-radius:16px;padding:24px;cursor:pointer;transition:all .3s;margin-bottom:20px}
+.upload-box:hover{border-color:#f9a8d4;background:rgba(255,255,255,.12)}
+.upload-icon{font-size:36px;margin-bottom:10px;display:block}
+.upload-text{font-size:13px;color:#e9d5ff;margin-bottom:6px}
+.upload-hint{font-size:11px;color:#c4b5fd}
+#photo-input{display:none}
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px;margin-top:16px}
+.photo-item{position:relative;aspect-ratio:1;border-radius:12px;overflow:hidden;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);cursor:pointer;transition:transform .2s}
+.photo-item:active{transform:scale(.95)}
+.photo-item img{width:100%;height:100%;object-fit:cover}
+.photo-delete{position:absolute;top:4px;right:4px;width:24px;height:24px;border-radius:50%;background:#fb7185;border:none;color:#fff;font-size:14px;cursor:pointer;display:none;align-items:center;justify-content:center;z-index:10}
+.photo-item:hover .photo-delete{display:flex}
+.nav-buttons{display:flex;gap:10px;justify-content:center;margin-top:20px}
+.nav-btn{padding:10px 16px;border-radius:8px;border:none;background:rgba(255,255,255,.1);color:#f9a8d4;font-size:12px;cursor:pointer;transition:all .2s;border:1px solid rgba(255,255,255,.2)}
+.nav-btn:hover{background:rgba(249,168,212,.2);border-color:#f9a8d4}
+</style>
+</head>
+<body>
+
+<div id="heart-layer"></div>
+
+<!-- SCREEN 1: PASSWORD -->
+<div class="screen" id="s-lock">
+  <div class="lock-box" id="lock-box">
+    <span class="lock-icon">🔒</span>
+    <p class="lock-title">Secret Birthday Page</p>
+    <p class="lock-sub">Enter the password to unlock your surprise...</p>
+    <input type="password" id="pw-input" placeholder="••••••" maxlength="12" autocomplete="off"/>
+    <button id="pw-btn" onclick="checkPw()">Unlock 🔑</button>
+    <p class="pw-error" id="pw-error"></p>
+    <div class="hint-box" id="hint-box">💡 Hint: It's simply the word "birthday" 🎂</div>
+    <div class="funny-box" id="funny-box">😂 3 wrong tries!! Really?!<br>Fine... the password is <strong style="color:#fde68a">birthday</strong> 🎂</div>
+  </div>
+</div>
+
+<!-- SCREEN 2: GIFT -->
+<div class="screen hidden" id="s-gift">
+  <div class="gift-area">
+    <p class="gift-title">A Gift Is Waiting...</p>
+    <p class="gift-sub">Tap the gift to open your surprise 🎁</p>
+    <div class="gift-wrap" id="gift-wrap" onclick="openGift()">
+      <svg class="gift-box-svg" id="gift-svg" width="150" height="170" viewBox="0 0 180 200">
+        <rect x="82" y="70" width="16" height="120" fill="#f9a8d4" rx="3"/>
+        <rect x="20" y="105" width="140" height="16" fill="#f9a8d4" rx="3"/>
+        <rect x="20" y="110" width="140" height="80" fill="#6d28d9" rx="8"/>
+        <rect x="14" y="95" width="152" height="30" fill="#7c3aed" rx="8"/>
+        <ellipse cx="72" cy="78" rx="20" ry="12" fill="#ec4899" transform="rotate(-30 72 78)"/>
+        <ellipse cx="108" cy="78" rx="20" ry="12" fill="#ec4899" transform="rotate(30 108 78)"/>
+        <circle cx="90" cy="82" r="10" fill="#f9a8d4"/>
+        <text x="45" y="155" font-size="16" fill="rgba(255,255,255,0.3)">★</text>
+        <text x="110" y="145" font-size="12" fill="rgba(255,255,255,0.25)">★</text>
+        <text x="130" y="165" font-size="10" fill="rgba(255,255,255,0.2)">★</text>
+      </svg>
+    </div>
+    <p class="click-hint">✨ Tap me! ✨</p>
+  </div>
+</div>
+
+<!-- SCREEN 3: MESSAGE -->
+<div class="screen hidden" id="s-msg">
+  <div class="msg-card">
+    <p class="msg-to">A birthday message for</p>
+    <p class="msg-name">My Dearest Friend 💖</p>
+    <div id="typed-msg"></div>
+    <div class="heart-row">❤️ 🎂 🎉 💕 🌸</div>
+    <div class="music-bar">
+      <button class="play-btn" id="play-btn" onclick="toggleMusic()">⏸</button>
+      <div class="music-info">
+        <p class="music-title">Happy Birthday melody 🎵</p>
+        <p class="music-note" id="music-note">Playing automatically ♪</p>
+      </div>
+      <div class="wave-bars" id="wave-bars">
+        <div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div>
+      </div>
+    </div>
+    <div class="nav-buttons">
+      <button class="nav-btn" onclick="showScreen(4)">📸 View Photos</button>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN 4: PHOTOS -->
+<div class="screen hidden" id="s-photos">
+  <div class="photos-area">
+    <p class="photos-title">Photo Gallery 📸</p>
+    <p class="photos-sub">Add and share your favorite memories!</p>
+    <div class="upload-box" onclick="document.getElementById('photo-input').click()">
+      <span class="upload-icon">📷</span>
+      <p class="upload-text">Click to add photos</p>
+      <p class="upload-hint">or drag & drop</p>
+      <input type="file" id="photo-input" accept="image/*" multiple onchange="handlePhotoUpload(event)"/>
+    </div>
+    <div class="gallery" id="gallery"></div>
+    <div class="nav-buttons">
+      <button class="nav-btn" onclick="showScreen(3)">← Back</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var tries=0,audioCtx=null,isPlaying=false,noteIdx=0,songTimer=null,typingDone=false;
+var PASSWORD="birthday";
+var LOVE_MSG="Wishing you the most magical birthday ever! You deserve all the happiness, all the love, and every beautiful moment life can offer. Thank you for being the incredible person you are. Today is YOUR day — shine bright and know that you are so deeply loved! 🌸✨";
+
+function initAudio(){
+  if(audioCtx) return;
+  audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+}
+
+function showScreen(n){
+  document.getElementById('s-lock').classList.toggle('hidden',n!==1);
+  document.getElementById('s-gift').classList.toggle('hidden',n!==2);
+  document.getElementById('s-msg').classList.toggle('hidden',n!==3);
+  document.getElementById('s-photos').classList.toggle('hidden',n!==4);
+  if(n===3){startTyping();startMusicAuto();}
+  if(n===4){loadPhotos();}
+}
+
+document.getElementById('pw-input').addEventListener('keydown',function(e){if(e.key==='Enter')checkPw()});
+
+function checkPw(){
+  initAudio();
+  var v=document.getElementById('pw-input').value.trim().toLowerCase();
+  var box=document.getElementById('lock-box');
+  var err=document.getElementById('pw-error');
+  if(v===PASSWORD){
+    err.textContent='';
+    box.style.transition='opacity .5s';
+    box.style.opacity='0';
+    setTimeout(function(){showScreen(2)},500);
+    return;
+  }
+  tries++;
+  box.classList.remove('shake');
+  void box.offsetWidth;
+  box.classList.add('shake');
+  document.getElementById('pw-input').value='';
+  if(tries===1) err.textContent='❌ Wrong password! Try again...';
+  if(tries===2){err.textContent='❌ Still wrong... need a hint?';document.getElementById('hint-box').style.display='block';}
+  if(tries>=3){err.textContent='😂 Okay okay...';document.getElementById('hint-box').style.display='none';document.getElementById('funny-box').style.display='block';}
+}
+
+function openGift(){
+  initAudio();
+  var wrap=document.getElementById('gift-wrap');
+  var svg=document.getElementById('gift-svg');
+  svg.classList.add('gift-opening');
+  for(var i=0;i<3;i++){
+    var ring=document.createElement('div');
+    ring.className='burst-ring';
+    ring.style.animationDelay=(i*0.15)+'s';
+    ring.style.borderColor=['#f9a8d4','#fde68a','#c4b5fd'][i];
+    wrap.appendChild(ring);
+  }
+  spawnBurstHearts();
+  setTimeout(function(){showScreen(3)},900);
+}
+
+function spawnBurstHearts(){
+  var emojis=['❤️','💕','💖','🎉','✨','🌸','💝','🎊'];
+  for(var i=0;i<16;i++){
+    (function(idx){
+      setTimeout(function(){
+        var h=document.createElement('div');
+        var cx=window.innerWidth/2,cy=window.innerHeight/2;
+        h.style.cssText='position:fixed;font-size:'+(14+Math.random()*18)+'px;left:'+cx+'px;top:'+cy+'px;pointer-events:none;z-index:100;transition:transform .6s ease,opacity .6s ease;opacity:1';
+        h.textContent=emojis[Math.floor(Math.random()*emojis.length)];
+        document.body.appendChild(h);
+        requestAnimationFrame(function(){requestAnimationFrame(function(){
+          var angle=Math.random()*360,dist=60+Math.random()*80;
+          h.style.transform='translate('+(Math.cos(angle*Math.PI/180)*dist)+'px,'+(Math.sin(angle*Math.PI/180)*dist)+'px)';
+          h.style.opacity='0';
+        })});
+        setTimeout(function(){h.remove()},700);
+      },idx*50);
+    })(i);
+  }
+}
+
+function startTyping(){
+  if(typingDone) return;
+  typingDone=true;
+  var el=document.getElementById('typed-msg');
+  var i=0;
+  function typeNext(){
+    if(i<=LOVE_MSG.length){el.textContent=LOVE_MSG.slice(0,i);i++;setTimeout(typeNext,i<5?120:40);}
+  }
+  setTimeout(typeNext,500);
+}
+
+var notes={C4:261.63,D4:293.66,E4:329.63,F4:349.23,G4:392,A4:440,B4:493.88,C5:523.25};
+var song=[['C4',.4],['C4',.2],['D4',.6],['C4',.6],['F4',.6],['E4',1.2],['C4',.4],['C4',.2],['D4',.6],['C4',.6],['G4',.6],['F4',1.2],['C4',.4],['C4',.2],['C5',.6],['A4',.6],['F4',.6],['E4',.6],['D4',1.0],['B4',.4],['B4',.2],['A4',.6],['F4',.6],['G4',.6],['F4',1.4]];
+
+function playNote(freq,dur){
+  if(!audioCtx) return;
+  var o=audioCtx.createOscillator(),g=audioCtx.createGain();
+  o.connect(g);g.connect(audioCtx.destination);
+  o.type='sine';o.frequency.value=freq;
+  g.gain.setValueAtTime(0.15,audioCtx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+dur*0.9);
+  o.start(audioCtx.currentTime);o.stop(audioCtx.currentTime+dur);
+}
+
+function scheduleSong(){
+  if(!isPlaying) return;
+  var n=song[noteIdx];
+  playNote(notes[n[0]],n[1]*0.85);
+  noteIdx=(noteIdx+1)%song.length;
+  songTimer=setTimeout(scheduleSong,n[1]*850);
+}
+
+function startMusicAuto(){
+  if(isPlaying) return;
+  if(!audioCtx) audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+  if(audioCtx.state==='suspended'){
+    audioCtx.resume().then(function(){
+      isPlaying=true;noteIdx=0;scheduleSong();
+    });
+  } else {
+    isPlaying=true;noteIdx=0;scheduleSong();
+  }
+}
+
+function toggleMusic(){
+  if(!audioCtx) audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+  if(audioCtx.state==='suspended') audioCtx.resume();
+  isPlaying=!isPlaying;
+  document.getElementById('play-btn').textContent=isPlaying?'⏸':'▶';
+  document.getElementById('wave-bars').classList.toggle('paused',!isPlaying);
+  document.getElementById('music-note').textContent=isPlaying?'Playing automatically ♪':'Paused';
+  if(isPlaying){noteIdx=0;scheduleSong();}
+  else clearTimeout(songTimer);
+}
+
+var heartEmojis=['❤️','💕','💖','💗','💓','💝','🩷','💞'];
+var heartColors=['#f9a8d4','#fde68a','#c4b5fd','#f0abfc','#fb7185'];
+
+function createHeart(){
+  var layer=document.getElementById('heart-layer');
+  var h=document.createElement('div');
+  h.className='fheart';
+  var size=11+Math.random()*20,dur=5+Math.random()*7,delay=Math.random()*2;
+  h.style.cssText='left:'+(Math.random()*100)+'%;font-size:'+size+'px;animation-duration:'+dur+'s;animation-delay:'+delay+'s;color:'+heartColors[Math.floor(Math.random()*heartColors.length)];
+  h.textContent=heartEmojis[Math.floor(Math.random()*heartEmojis.length)];
+  h.addEventListener('click',explodeHeart);
+  h.addEventListener('touchstart',function(e){e.preventDefault();explodeHeart(e)},{passive:false});
+  layer.appendChild(h);
+  setTimeout(function(){if(h.parentNode)h.remove()},(dur+delay)*1000+200);
+}
+
+function explodeHeart(e){
+  e.stopPropagation();
+  var h=e.currentTarget;
+  var rect=h.getBoundingClientRect();
+  var cx=rect.left+rect.width/2,cy=rect.top+rect.height/2;
+  h.classList.add('exploding');
+  for(var i=0;i<8;i++){
+    (function(idx){
+      var p=document.createElement('div');
+      var angle=(idx/8)*360,dist=35+Math.random()*35;
+      p.style.cssText='position:fixed;left:'+cx+'px;top:'+cy+'px;font-size:13px;pointer-events:none;z-index:200;transition:transform .5s ease,opacity .5s ease;opacity:1';
+      p.textContent=['✨','💥','❤️','💫'][Math.floor(Math.random()*4)];
+      document.body.appendChild(p);
+      requestAnimationFrame(function(){requestAnimationFrame(function(){
+        p.style.transform='translate('+(Math.cos(angle*Math.PI/180)*dist)+'px,'+(Math.sin(angle*Math.PI/180)*dist)+'px)';
+        p.style.opacity='0';
+      })});
+      setTimeout(function(){p.remove()},600);
+    })(i);
+  }
+  setTimeout(function(){if(h.parentNode)h.remove()},500);
+}
+
+setInterval(createHeart,380);
+for(var i=0;i<14;i++) createHeart();
+
+var spkls=['✨','⭐','🌟','💫'];
+for(var i=0;i<8;i++){
+  var s=document.createElement('div');
+  s.className='sparkle-fixed';
+  s.style.cssText='left:'+(Math.random()*90)+'%;top:'+(Math.random()*90)+'%;animation-delay:'+(Math.random()*2)+'s;animation-duration:'+(1.5+Math.random()*1.5)+'s';
+  s.textContent=spkls[Math.floor(Math.random()*spkls.length)];
+  document.body.appendChild(s);
+}
+
+// PHOTO GALLERY FUNCTIONS
+function getPhotos(){
+  var p=localStorage.getItem('birthdayPhotos');
+  return p?JSON.parse(p):[];
+}
+
+function savePhotos(photos){
+  localStorage.setItem('birthdayPhotos',JSON.stringify(photos));
+}
+
+function handlePhotoUpload(e){
+  var files=e.target.files;
+  if(!files.length) return;
+  var photos=getPhotos();
+  for(var i=0;i<Math.min(files.length,20-photos.length);i++){
+    var reader=new FileReader();
+    (function(file){
+      reader.onload=function(event){
+        photos.push(event.target.result);
+        if(photos.length===i+1||i===files.length-1){
+          savePhotos(photos);
+          loadPhotos();
+        }
+      };
+      reader.readAsDataURL(file);
+    })(files[i]);
+  }
+  document.getElementById('photo-input').value='';
+}
+
+function loadPhotos(){
+  var photos=getPhotos();
+  var gallery=document.getElementById('gallery');
+  gallery.innerHTML='';
+  for(var i=0;i<photos.length;i++){
+    (function(idx,photo){
+      var item=document.createElement('div');
+      item.className='photo-item';
+      item.innerHTML='<img src="'+photo+'" alt="photo"/><button class="photo-delete" onclick="deletePhoto('+idx+')">×</button>';
+      gallery.appendChild(item);
+    })(i,photos[i]);
+  }
+}
+
+function deletePhoto(idx){
+  var photos=getPhotos();
+  photos.splice(idx,1);
+  savePhotos(photos);
+  loadPhotos();
+}
+
+// Enable drag & drop
+document.addEventListener('dragover',function(e){
+  e.preventDefault();
+  document.getElementById('photo-input').parentElement.style.borderColor='#f9a8d4';
+},false);
+
+document.addEventListener('dragleave',function(e){
+  e.preventDefault();
+  document.getElementById('photo-input').parentElement.style.borderColor='rgba(255,255,255,.3)';
+},false);
+
+document.addEventListener('drop',function(e){
+  e.preventDefault();
+  document.getElementById('photo-input').parentElement.style.borderColor='rgba(255,255,255,.3)';
+  if(e.dataTransfer.files.length){
+    document.getElementById('photo-input').files=e.dataTransfer.files;
+    handlePhotoUpload({target:{files:e.dataTransfer.files}});
+  }
+},false);
+</script>
+</body>
+</html>
